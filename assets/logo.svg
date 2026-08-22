@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" role="img" aria-label="Aiden's Lawn Repair">
+  <defs>
+    <linearGradient id="alrGreen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#c3ee5d"/>
+      <stop offset="48%"  stop-color="#7ac93a"/>
+      <stop offset="100%" stop-color="#3f8f12"/>
+    </linearGradient>
+    <linearGradient id="alrWhite" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#d9e3cf"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Both lines are forced to the same width so the wordmark reads as one
+       stacked block, the way the original logo does. -->
+  <g font-family="'Arial Black','Archivo Black',Impact,sans-serif" font-weight="900"
+     stroke="#16300a" stroke-linejoin="round" paint-order="stroke"
+     textLength="600" lengthAdjust="spacingAndGlyphs" x="20">
+    <text x="20" y="92"  font-size="92" stroke-width="14"
+          fill="url(#alrGreen)" textLength="600" lengthAdjust="spacingAndGlyphs">AIDEN&#8217;S</text>
+    <text x="20" y="176" font-size="80" stroke-width="13"
+          fill="url(#alrWhite)" textLength="600" lengthAdjust="spacingAndGlyphs">LAWN REPAIR</text>
+  </g>
+</svg>
