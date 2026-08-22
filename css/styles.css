@@ -549,6 +549,14 @@ p { margin: 0 0 1rem; }
   box-shadow: 3px 3px 0 var(--green-900);
 }
 
+.areas-note {
+  margin: 22px auto 0;
+  max-width: 46ch;
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
 /* -------------------------------------------------------------- quote --- */
 
 .quote-section {

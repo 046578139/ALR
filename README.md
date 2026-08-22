@@ -34,10 +34,14 @@ replace across the whole project:
 | `(555) 010-2345` and `tel:+15550102345` | `index.html`, `js/main.js` | Real phone number |
 | `hello@aidenslawnrepair.com` | `index.html`, `js/main.js` | Real email address |
 | `Mon–Sat, 7am–7pm` | `index.html` | Real hours |
-| City names in the **Service Area** list, and "15-mile radius" | `index.html` | Real towns and radius |
 | Reviews (Dana R., Marcus T., Priya S.) | `index.html` | Real customer reviews |
 | `<p class="placeholder-note">` under the Reviews heading | `index.html` | Delete it once the reviews are real |
 | `https://formspree.io/f/your-form-id` | `index.html` | Real form endpoint (see below) |
+
+The business is based in **Martinsburg, WV**; the service-area towns
+(Hedgesville, Inwood, Falling Waters, Shepherdstown, Charles Town, Hagerstown MD,
+Winchester VA) and the page title and meta description are real, not
+placeholders. Leave them alone unless the coverage changes.
 
 Quick way to find the contact details:
 
