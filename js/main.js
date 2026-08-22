@@ -35,8 +35,8 @@
      never renders a broken image. */
 
   var HERO_SOURCES = [
-    "assets/hero-logo.png",
     "assets/hero-logo.jpg",
+    "assets/hero-logo.png",
     "assets/hero-logo.jpeg",
     "assets/hero-logo.webp",
     "assets/logo.png",

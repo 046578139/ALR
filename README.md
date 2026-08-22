@@ -71,30 +71,19 @@ Formspree, Netlify Forms, Basin, or your own handler.
 The form also validates before sending: required fields, a real-looking email,
 and a 10-digit phone number, with inline messages under each field.
 
-## Adding the cartoon illustration
+## The cartoon illustration
 
-The hero is already built around the full illustration (Aiden on the mower). It
-just needs the file:
+`assets/hero-logo.jpg` (886×886) is the hero artwork and also the social-share
+image via `og:image`.
 
-1. Put the image in `assets/`, named `hero-logo` — any of `.png`, `.jpg`,
-   `.jpeg` or `.webp` works. (`assets/logo.png` and `assets/logo.jpg` are
-   picked up too.)
-2. Reload the page. That's it — no code changes.
+To replace it, overwrite that file — a square image, roughly 800×800 to
+1200×1200, suits the slot. If you'd rather use a different format, `js/main.js`
+also accepts `hero-logo.png`, `.jpeg` and `.webp`, plus `logo.png` / `logo.jpg`,
+and uses the first one that loads. If none are present the hero falls back to
+the vector wordmark, so the page never shows a broken image.
 
-`js/main.js` tries those names in order and uses the first one that loads.
-Until one of them exists, the hero falls back to the vector wordmark, so the
-page never shows a broken image. The fallback also drops the inner photo frame,
-since a wordmark isn't a photo.
-
-A square image (roughly 1:1, like the original) fits the slot best. Anything
-from about 800×800 up to 1200×1200 is plenty — bigger just costs load time.
-
-Once the PNG is in place, it's also a better social-share image than the current
-SVG. Point `og:image` at it in `index.html`:
-
-```html
-<meta property="og:image" content="assets/hero-logo.png">
-```
+The file is about 400 KB. If page speed matters later, re-saving it as WebP
+would cut that substantially with no visible difference.
 
 ## The wordmark
 
