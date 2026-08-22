@@ -479,6 +479,20 @@ p { margin: 0 0 1rem; }
   font-weight: 900;
 }
 
+/* Marks content that must be replaced before the site goes public. */
+.placeholder-note {
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  background: #fff6d9;
+  border: 2px dashed var(--green-800);
+  border-radius: 999px;
+  padding: 6px 16px;
+  display: inline-block;
+  margin: 0 auto;
+}
+.placeholder-note.center { display: block; width: fit-content; }
+
 /* ------------------------------------------------------------- quotes --- */
 
 .quotes {

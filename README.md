@@ -36,6 +36,7 @@ replace across the whole project:
 | `Mon–Sat, 7am–7pm` | `index.html` | Real hours |
 | City names in the **Service Area** list, and "15-mile radius" | `index.html` | Real towns and radius |
 | Reviews (Dana R., Marcus T., Priya S.) | `index.html` | Real customer reviews |
+| `<p class="placeholder-note">` under the Reviews heading | `index.html` | Delete it once the reviews are real |
 | `https://formspree.io/f/your-form-id` | `index.html` | Real form endpoint (see below) |
 
 Quick way to find the contact details:
@@ -43,6 +44,11 @@ Quick way to find the contact details:
 ```bash
 grep -rn "555) 010-2345\|aidenslawnrepair.com" index.html js/main.js
 ```
+
+The three reviews are written-in examples, not real customers, so the page
+labels them "Sample reviews — swap in real ones before launch." Replace them
+with real quotes and delete that label. Publishing invented testimonials as
+though they were genuine is worth avoiding on a real business site.
 
 The strip under the hero ("one very green mower", "0 lawns lost so far") is
 deliberately a joke rather than real statistics, so there's nothing to verify or
