@@ -76,13 +76,15 @@ and a 10-digit phone number, with inline messages under each field.
 The hero is already built around the full illustration (Aiden on the mower). It
 just needs the file:
 
-1. Save the image as `assets/hero-logo.png`.
+1. Put the image in `assets/`, named `hero-logo` — any of `.png`, `.jpg`,
+   `.jpeg` or `.webp` works. (`assets/logo.png` and `assets/logo.jpg` are
+   picked up too.)
 2. Reload the page. That's it — no code changes.
 
-Until that file exists, the hero falls back to the vector wordmark
-automatically, so the page never shows a broken image. The swap is handled by
-`js/main.js`; the fallback also drops the inner photo frame, since a wordmark
-isn't a photo.
+`js/main.js` tries those names in order and uses the first one that loads.
+Until one of them exists, the hero falls back to the vector wordmark, so the
+page never shows a broken image. The fallback also drops the inner photo frame,
+since a wordmark isn't a photo.
 
 A square image (roughly 1:1, like the original) fits the slot best. Anything
 from about 800×800 up to 1200×1200 is plenty — bigger just costs load time.

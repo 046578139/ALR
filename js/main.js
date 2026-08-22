@@ -30,14 +30,24 @@
   }
 
   /* ------------------------------------------- hero illustration --- */
-  /* The hero shows assets/hero-logo.png. Until that file is added, fall back
-     to the vector wordmark so the page never renders a broken image. */
+  /* Drop the artwork into assets/ under any of these names and it appears.
+     If none of them are there, fall back to the vector wordmark so the page
+     never renders a broken image. */
+
+  var HERO_SOURCES = [
+    "assets/hero-logo.png",
+    "assets/hero-logo.jpg",
+    "assets/hero-logo.jpeg",
+    "assets/hero-logo.webp",
+    "assets/logo.png",
+    "assets/logo.jpg"
+  ];
 
   var heroImage = document.getElementById("heroImage");
   var heroArt = document.getElementById("heroArt");
+  var heroIndex = 0;
 
   function useWordmarkFallback() {
-    if (!heroImage || !heroArt) return;
     heroImage.src = "assets/logo.svg";
     heroImage.alt = "Aiden's Lawn Repair";
     heroImage.removeAttribute("width");
@@ -45,10 +55,19 @@
     heroArt.classList.add("is-fallback");
   }
 
-  if (heroImage) {
-    heroImage.addEventListener("error", useWordmarkFallback);
-    // The image may have already failed before this script ran.
-    if (heroImage.complete && heroImage.naturalWidth === 0) useWordmarkFallback();
+  function tryNextHeroSource() {
+    heroIndex += 1;
+    if (heroIndex < HERO_SOURCES.length) {
+      heroImage.src = HERO_SOURCES[heroIndex];
+    } else {
+      useWordmarkFallback();
+    }
+  }
+
+  if (heroImage && heroArt) {
+    heroImage.addEventListener("error", tryNextHeroSource);
+    // The first source may have already failed before this script ran.
+    if (heroImage.complete && heroImage.naturalWidth === 0) tryNextHeroSource();
   }
 
   /* ------------------------------------------------- footer year --- */
