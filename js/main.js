@@ -29,6 +29,28 @@
     });
   }
 
+  /* ------------------------------------------- hero illustration --- */
+  /* The hero shows assets/hero-logo.png. Until that file is added, fall back
+     to the vector wordmark so the page never renders a broken image. */
+
+  var heroImage = document.getElementById("heroImage");
+  var heroArt = document.getElementById("heroArt");
+
+  function useWordmarkFallback() {
+    if (!heroImage || !heroArt) return;
+    heroImage.src = "assets/logo.svg";
+    heroImage.alt = "Aiden's Lawn Repair";
+    heroImage.removeAttribute("width");
+    heroImage.removeAttribute("height");
+    heroArt.classList.add("is-fallback");
+  }
+
+  if (heroImage) {
+    heroImage.addEventListener("error", useWordmarkFallback);
+    // The image may have already failed before this script ran.
+    if (heroImage.complete && heroImage.naturalWidth === 0) useWordmarkFallback();
+  }
+
   /* ------------------------------------------------- footer year --- */
 
   var year = document.getElementById("year");

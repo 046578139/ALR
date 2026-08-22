@@ -71,12 +71,36 @@ Formspree, Netlify Forms, Basin, or your own handler.
 The form also validates before sending: required fields, a real-looking email,
 and a 10-digit phone number, with inline messages under each field.
 
-## The logo
+## Adding the cartoon illustration
 
-`assets/logo.svg` is a vector rebuild of the wordmark, so it stays sharp at any
-size and loads fast. To use the original cartoon artwork instead, drop the file
-in as `assets/logo.png` and update the three `<img src="assets/logo.svg">`
-references in `index.html` (header, hero card, footer).
+The hero is already built around the full illustration (Aiden on the mower). It
+just needs the file:
+
+1. Save the image as `assets/hero-logo.png`.
+2. Reload the page. That's it — no code changes.
+
+Until that file exists, the hero falls back to the vector wordmark
+automatically, so the page never shows a broken image. The swap is handled by
+`js/main.js`; the fallback also drops the inner photo frame, since a wordmark
+isn't a photo.
+
+A square image (roughly 1:1, like the original) fits the slot best. Anything
+from about 800×800 up to 1200×1200 is plenty — bigger just costs load time.
+
+Once the PNG is in place, it's also a better social-share image than the current
+SVG. Point `og:image` at it in `index.html`:
+
+```html
+<meta property="og:image" content="assets/hero-logo.png">
+```
+
+## The wordmark
+
+`assets/logo.svg` is a vector rebuild of the wordmark used in the header and
+footer, so it stays sharp at any size and loads fast. It's text only — it
+doesn't include the mower illustration. To swap in raster artwork there too,
+drop it in and update the `<img src="assets/logo.svg">` references in
+`index.html`.
 
 ## Hosting
 

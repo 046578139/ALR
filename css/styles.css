@@ -328,6 +328,7 @@ p { margin: 0 0 1rem; }
 }
 
 .hero-card {
+  margin: 0;
   background: var(--white);
   border: var(--border);
   border-radius: var(--radius-lg);
@@ -336,7 +337,20 @@ p { margin: 0 0 1rem; }
   box-shadow: var(--pop-lg);
   transform: rotate(-1.5deg);
 }
-.hero-card img { margin: 0 auto 14px; width: 100%; max-width: 380px; }
+.hero-card img {
+  margin: 0 auto 14px;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 12px;
+  border: 2px solid var(--green-900);
+}
+
+/* The vector wordmark stand-in isn't a photo, so it drops the inner frame. */
+.hero-card.is-fallback img {
+  max-width: 380px;
+  border: 0;
+  border-radius: 0;
+}
 .hero-card-tag {
   margin: 0;
   font-weight: 800;
