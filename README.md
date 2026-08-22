@@ -89,6 +89,20 @@ the vector wordmark, so the page never shows a broken image.
 The file is about 400 KB. If page speed matters later, re-saving it as WebP
 would cut that substantially with no visible difference.
 
+## The gallery photos
+
+The "On the Job" section uses `assets/service-scooping.jpg`,
+`service-cleanup.jpg` and `service-tree-removal.jpg` — 800x800 JPEGs
+re-encoded from the uploaded PNGs (`image.png`, `image2.png`, `image3.png`,
+1254x1254). The originals were 8.6 MB combined, which is far too heavy to
+serve; the optimized set is about 600 KB.
+
+The original PNGs are kept in `assets/` as the source files but are excluded
+from the deploy build, since nothing on the page references them. If you swap
+in new artwork, re-encode it the same way rather than shipping multi-megabyte
+PNGs — a 1 MB image is the difference between a page that loads instantly on
+phone data and one that doesn't.
+
 ## The wordmark
 
 `assets/logo.svg` is a vector rebuild of the wordmark used in the header and

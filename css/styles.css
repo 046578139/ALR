@@ -418,6 +418,46 @@ p { margin: 0 0 1rem; }
 .card h3 { color: var(--green-900); }
 .card p { margin: 0; color: var(--ink-soft); }
 
+/* ------------------------------------------------------------ gallery --- */
+
+.gallery {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  margin-top: 44px;
+}
+
+.shot {
+  margin: 0;
+  background: var(--white);
+  border: var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--pop);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.shot:hover { transform: translate(-2px, -3px); box-shadow: var(--pop-lg); }
+
+.shot img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-bottom: var(--border);
+}
+
+.shot figcaption {
+  padding: 18px 20px 20px;
+  font-size: .95rem;
+  color: var(--ink-soft);
+}
+.shot figcaption strong {
+  display: block;
+  font-family: var(--font-head);
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: -.01em;
+  color: var(--green-900);
+  margin-bottom: 5px;
+}
+
 /* -------------------------------------------------------------- steps --- */
 
 .steps {
