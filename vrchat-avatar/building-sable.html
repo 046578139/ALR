@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Building Sable</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Karla:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground:      #F7F3F5;
+    --surface:     #FFFFFF;
+    --surface-alt: #F0EAEE;
+    --ink:         #1B1720;
+    --ink-soft:    #5A5060;
+    --ink-faint:   #8B8093;
+    --rule:        #E0D6DE;
+    --plum:        #2E2733;
+    --lilac:       #9B7FB5;
+    --lilac-soft:  #C9B6D9;
+    --amber:       #B87A22;
+    --amber-bright:#E0A24B;
+    --sage:        #6E8159;
+    --rose:        #C07C7C;
+    --shadow:      0 1px 2px rgba(27,23,32,.06), 0 8px 24px -12px rgba(27,23,32,.18);
+
+    --step: clamp(1rem, 0.85rem + 0.6vw, 1.35rem);
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #151119;
+      --surface:     #1E1826;
+      --surface-alt: #271F30;
+      --ink:         #EDE6F0;
+      --ink-soft:    #B4A8BD;
+      --ink-faint:   #8B7F95;
+      --rule:        #362C40;
+      --plum:        #C9B6D9;
+      --lilac:       #C9B6D9;
+      --lilac-soft:  #9B7FB5;
+      --amber:       #E0A24B;
+      --amber-bright:#F0BC70;
+      --sage:        #9DB184;
+      --rose:        #D99B9B;
+      --shadow:      0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #151119;
+    --surface:     #1E1826;
+    --surface-alt: #271F30;
+    --ink:         #EDE6F0;
+    --ink-soft:    #B4A8BD;
+    --ink-faint:   #8B7F95;
+    --rule:        #362C40;
+    --plum:        #C9B6D9;
+    --lilac:       #C9B6D9;
+    --lilac-soft:  #9B7FB5;
+    --amber:       #E0A24B;
+    --amber-bright:#F0BC70;
+    --sage:        #9DB184;
+    --rose:        #D99B9B;
+    --shadow:      0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Karla", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: var(--step);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 46rem;
+    margin-inline: auto;
+    padding-inline: 20px;
+    padding-block: 3rem 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.25rem;
+  }
+
+  h1, h2, h3 {
+    font-family: "Fraunces", ui-serif, Georgia, serif;
+    text-wrap: balance;
+    margin: 0;
+    line-height: 1.15;
+  }
+  h1 { font-size: clamp(2.4rem, 1.7rem + 3.2vw, 3.6rem); font-weight: 600; letter-spacing: -0.015em; }
+  h2 { font-size: clamp(1.5rem, 1.25rem + 1.1vw, 1.95rem); font-weight: 600; letter-spacing: -0.01em; }
+  h3 { font-size: 1.12rem; font-weight: 600; }
+  p  { margin: 0; }
+
+  a { color: var(--lilac); text-decoration-color: color-mix(in srgb, var(--lilac) 40%, transparent); text-underline-offset: 3px; }
+  a:hover { text-decoration-color: currentColor; }
+  a:focus-visible, input:focus-visible, button:focus-visible {
+    outline: 2px solid var(--amber-bright);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  code, .mono {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.84em;
+  }
+  code {
+    background: var(--surface-alt);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    word-break: break-word;
+  }
+
+  .eyebrow {
+    font-family: "Karla", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  /* ---- header ---- */
+  header { display: flex; flex-direction: column; gap: 1rem; }
+  .lede { font-size: 1.12rem; color: var(--ink-soft); max-width: 34rem; }
+
+  .meter {
+    display: flex; align-items: center; gap: 0.85rem;
+    padding: 0.7rem 0.95rem;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    font-size: 0.9rem;
+  }
+  .meter-track {
+    flex: 1; height: 6px; border-radius: 99px;
+    background: var(--surface-alt); overflow: hidden;
+  }
+  .meter-fill {
+    height: 100%; width: 0%; border-radius: 99px;
+    background: linear-gradient(90deg, var(--lilac-soft), var(--amber-bright));
+    transition: width .35s ease;
+  }
+  .meter-count { font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
+  .meter-note { color: var(--ink-faint); font-size: 0.8rem; white-space: nowrap; }
+
+  /* ---- generic section ---- */
+  section { display: flex; flex-direction: column; gap: 1.1rem; }
+  .section-head { display: flex; flex-direction: column; gap: 0.4rem; }
+
+  /* ---- callout ---- */
+  .note {
+    border-left: 3px solid var(--amber-bright);
+    padding: 0.15rem 0 0.15rem 1rem;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+  .note strong { color: var(--ink); }
+
+  /* ---- character spec ---- */
+  .spec {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .spec-top {
+    padding: 1.5rem 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: 0.55rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .spec-name { font-family: "Fraunces", serif; font-size: 2rem; font-weight: 600; line-height: 1; }
+  .spec-tag { color: var(--ink-soft); font-size: 0.95rem; }
+
+  .swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 0; }
+  .sw { padding: 0.85rem 0.9rem 0.95rem; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); display: flex; flex-direction: column; gap: 0.5rem; }
+  .sw:last-child { border-right: 0; }
+  .sw-chip { height: 34px; border-radius: 6px; border: 1px solid rgba(27,23,32,.14); }
+  .sw-role { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); }
+  .sw-hex { font-family: "JetBrains Mono", monospace; font-size: 0.76rem; color: var(--ink-soft); }
+
+  .traits { margin: 0; padding: 0.35rem 0 0.6rem; }
+  .trait { display: grid; grid-template-columns: 8.5rem 1fr; gap: 0.4rem 1rem; padding: 0.6rem 1.5rem; border-bottom: 1px solid var(--rule); }
+  .trait:last-child { border-bottom: 0; }
+  .trait dt { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); padding-top: 0.22rem; }
+  .trait dd { margin: 0; font-size: 0.95rem; }
+  @media (max-width: 34rem) { .trait { grid-template-columns: 1fr; } }
+
+  /* ---- phases ---- */
+  .phase { display: flex; flex-direction: column; gap: 0.9rem; }
+  .phase-head { display: flex; align-items: baseline; gap: 0.75rem; }
+  .phase-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.8rem; font-weight: 500;
+    color: var(--amber);
+    border: 1px solid color-mix(in srgb, var(--amber) 35%, transparent);
+    border-radius: 99px;
+    padding: 0.12rem 0.55rem;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .phase-when { font-size: 0.8rem; color: var(--ink-faint); margin-left: auto; white-space: nowrap; }
+
+  ul.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.15rem; }
+  li.step {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+    align-items: start;
+    padding: 0.6rem 0.7rem;
+    border-radius: 8px;
+    transition: background .15s ease;
+  }
+  li.step:hover { background: var(--surface-alt); }
+  li.step input[type="checkbox"] {
+    appearance: none;
+    width: 1.15rem; height: 1.15rem;
+    margin: 0.2rem 0 0;
+    border: 1.5px solid var(--ink-faint);
+    border-radius: 5px;
+    background: var(--surface);
+    cursor: pointer;
+    display: grid; place-content: center;
+    flex: none;
+  }
+  li.step input[type="checkbox"]::after {
+    content: "";
+    width: 0.62rem; height: 0.34rem;
+    border-left: 2px solid var(--ground);
+    border-bottom: 2px solid var(--ground);
+    transform: rotate(-45deg) translateY(-1px) scale(0);
+    transition: transform .12s ease;
+  }
+  li.step input[type="checkbox"]:checked {
+    background: var(--lilac);
+    border-color: var(--lilac);
+  }
+  li.step input[type="checkbox"]:checked::after { transform: rotate(-45deg) translateY(-1px) scale(1); }
+  li.step label { cursor: pointer; }
+  li.step input:checked ~ label { color: var(--ink-faint); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--ink-faint) 50%, transparent); }
+  li.step input:checked ~ label a { color: var(--ink-faint); }
+  .step-sub { display: block; margin-top: 0.25rem; font-size: 0.85rem; color: var(--ink-soft); text-decoration: none !important; }
+  li.step input:checked ~ label .step-sub { color: var(--ink-faint); }
+
+  /* ---- table ---- */
+  .table-scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+  th, td { text-align: left; padding: 0.6rem 0.85rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); font-weight: 700; }
+  td.cost { font-family: "JetBrains Mono", monospace; color: var(--sage); font-weight: 500; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  tbody tr:last-child td { border-bottom: 0; }
+
+  /* ---- footer ---- */
+  footer { border-top: 1px solid var(--rule); padding-top: 1.5rem; display: flex; flex-direction: column; gap: 0.7rem; font-size: 0.85rem; color: var(--ink-soft); }
+  footer ul { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.3rem; }
+  .sync { font-size: 0.78rem; color: var(--ink-faint); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">Free build · PC / PCVR · no modeling required</p>
+    <h1>Building Sable</h1>
+    <p class="lede">A cute kemonomimi VRChat avatar, made entirely from free tools. You design her yourself in a character creator, convert, and upload — no Blender, no marketplace purchase, no ripped models.</p>
+    <div class="meter">
+      <span class="meter-count" id="count">0 / 28</span>
+      <span class="meter-track"><span class="meter-fill" id="fill"></span></span>
+      <span class="meter-note" id="sync-note">steps done</span>
+    </div>
+  </header>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Before you start</p>
+      <h2>The one thing that will actually block you</h2>
+    </div>
+    <p>Every tool below is genuinely free. The blocker isn't money — it's your VRChat account. <strong>Brand-new Visitor accounts cannot upload avatars.</strong> You need to reach <strong>New User</strong> trust rank first, which means verifying your email and spending some hours actually playing. Start that clock today, because it runs in the background while you build everything else.</p>
+    <p class="note">Budget roughly <strong>three evenings</strong>: one to design her, one to fight Unity into place, one to convert, polish and upload. The middle evening is the annoying one. Everything after it is fast.</p>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">The character</p>
+      <h2>Sable</h2>
+      <p style="color:var(--ink-soft)">A design brief, not a rule. These are concrete values you can type straight into the color pickers — change any of them and she's more yours, which is the point.</p>
+    </div>
+
+    <div class="spec">
+      <div class="spec-top">
+        <span class="spec-name">Sable</span>
+        <span class="spec-tag">Small, soft-featured, permanently five minutes out of bed. Cool palette, one warm pop, one deliberate asymmetry.</span>
+      </div>
+
+      <div class="swatches">
+        <div class="sw"><span class="sw-chip" style="background:#2E2733"></span><span class="sw-role">Hair root</span><span class="sw-hex">#2E2733</span></div>
+        <div class="sw"><span class="sw-chip" style="background:#C9B6D9"></span><span class="sw-role">Hair tip</span><span class="sw-hex">#C9B6D9</span></div>
+        <div class="sw"><span class="sw-chip" style="background:#E0A24B"></span><span class="sw-role">Eyes</span><span class="sw-hex">#E0A24B</span></div>
+        <div class="sw"><span class="sw-chip" style="background:#F2DDD0"></span><span class="sw-role">Skin</span><span class="sw-hex">#F2DDD0</span></div>
+        <div class="sw"><span class="sw-chip" style="background:#D99B9B"></span><span class="sw-role">Inner ear</span><span class="sw-hex">#D99B9B</span></div>
+        <div class="sw"><span class="sw-chip" style="background:#8B9E7A"></span><span class="sw-role">Knit</span><span class="sw-hex">#8B9E7A</span></div>
+      </div>
+
+      <dl class="traits">
+        <div class="trait"><dt>Hair</dt><dd>Deep charcoal-plum at the root melting to soft lilac at the tips. VRoid does root-to-tip gradients natively, so this costs you two color pickers and nothing else. Medium length, heavy fringe, slightly overgrown.</dd></div>
+        <div class="trait"><dt>Eyes</dt><dd>Warm honey-amber with a darker outer ring. This is the <em>only</em> warm color on her — against all that cool plum it does a lot of work. Large iris, low-set highlight.</dd></div>
+        <div class="trait"><dt>Ears</dt><dd>Charcoal outer to match the hair root, dusty rose inner. Set them <em>slightly</em> further back and wider apart than the preset default — dead-center-on-top reads as a headband, off-center reads as anatomy.</dd></div>
+        <div class="trait"><dt>Face</dt><dd>The signature: a light dusting of freckles across the nose bridge and upper cheeks, plus soft under-eye blush. Two minutes in the face-paint layer, and it's the thing people remember.</dd></div>
+        <div class="trait"><dt>Outfit</dt><dd>Oversized sage knit sweater, worn falling off one shoulder. Black shorts underneath, mostly hidden. Sleeves past the hands.</dd></div>
+        <div class="trait"><dt>Legs</dt><dd>Mismatched thigh-highs — one charcoal, one lilac. The deliberate asymmetry. It's small, it's free, and it's the difference between a preset and a character.</dd></div>
+        <div class="trait"><dt>Tail</dt><dd>Charcoal with a lilac tip, echoing the hair gradient. VRoid ships a cat tail accessory as of v1.27.0, so this is a dropdown, not a modeling job.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Phases</p>
+      <h2>The build</h2>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head"><span class="phase-num">01</span><h3>Start the trust-rank clock</h3><span class="phase-when">day one</span></div>
+      <ul class="steps">
+        <li class="step"><input type="checkbox" id="s1"><label for="s1">Make a VRChat account and <strong>verify the email</strong><span class="step-sub">Unverified accounts stay stuck at Visitor forever.</span></label></li>
+        <li class="step"><input type="checkbox" id="s2"><label for="s2">Play for a few hours across a couple of days<span class="step-sub">Trust rank rises with real playtime. There's no button for this and no way to rush it — just leave it running while you do the rest.</span></label></li>
+        <li class="step"><input type="checkbox" id="s3"><label for="s3">Confirm you've hit <strong>New User</strong> (blue name)<span class="step-sub">Until this flips, the SDK upload button will refuse you.</span></label></li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head"><span class="phase-num">02</span><h3>Design her in VRoid Studio</h3><span class="phase-when">evening one</span></div>
+      <p style="color:var(--ink-soft);font-size:.95rem">A free character creator from Pixiv. It's sliders and presets — closer to a character creator in an RPG than to 3D modeling. This is where Sable actually gets made.</p>
+      <ul class="steps">
+        <li class="step"><input type="checkbox" id="s4"><label for="s4">Install <a href="https://vroid.com/en/studio" target="_blank" rel="noopener">VRoid Studio</a><span class="step-sub">Free, Windows/Mac. Make sure you're on v1.27.0 or newer — that's the version that added the cat tail accessory.</span></label></li>
+        <li class="step"><input type="checkbox" id="s5"><label for="s5">Start from a female base and shrink the proportions<span class="step-sub">Pull head scale slightly up and overall height down. Cute reads as head-to-body ratio more than anything else.</span></label></li>
+        <li class="step"><input type="checkbox" id="s6"><label for="s6">Set skin to <code>#F2DDD0</code>, eyes to <code>#E0A24B</code><span class="step-sub">Enlarge the iris and drop the highlight low in the eye.</span></label></li>
+        <li class="step"><input type="checkbox" id="s7"><label for="s7">Pick a medium-length hair preset with a heavy fringe<span class="step-sub">Set base color <code>#2E2733</code> and the tip/gradient color <code>#C9B6D9</code>.</span></label></li>
+        <li class="step"><input type="checkbox" id="s8"><label for="s8">Add freckles and under-eye blush in the face-paint layer<span class="step-sub">The signature detail. Keep it faint — you want a dusting, not spots.</span></label></li>
+        <li class="step"><input type="checkbox" id="s9"><label for="s9">Dress her: oversized knit <code>#8B9E7A</code>, black shorts, mismatched thigh-highs<span class="step-sub">One charcoal leg, one lilac. Use the built-in clothing presets and recolor.</span></label></li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head"><span class="phase-num">03</span><h3>Ears and tail</h3><span class="phase-when">evening one</span></div>
+      <ul class="steps">
+        <li class="step"><input type="checkbox" id="s10"><label for="s10">Add the built-in <strong>Cat Tail</strong> accessory<span class="step-sub">Native since v1.27.0. Charcoal body, lilac tip.</span></label></li>
+        <li class="step"><input type="checkbox" id="s11"><label for="s11">Grab a free cat-ear hair preset from BOOTH<span class="step-sub">Search BOOTH for <code>vroid cat ears</code> and filter to ¥0. <a href="https://booth.pm/en/items/3188368" target="_blank" rel="noopener">KurukaShop's</a> is free; <a href="https://booth.pm/en/items/2592484" target="_blank" rel="noopener">desertdraggon's</a> is free with credit. Respect whatever terms the creator lists.</span></label></li>
+        <li class="step"><input type="checkbox" id="s12"><label for="s12">Import it via <strong>Import Custom Items</strong> in the top-left menu<span class="step-sub">It's a <code>.vroidcustomitem</code> file. Some older presets need importing in the beta version first to convert them.</span></label></li>
+        <li class="step"><input type="checkbox" id="s13"><label for="s13">Color and position: charcoal outer, <code>#D99B9B</code> inner, set back and wide<span class="step-sub">Nudge them off dead-center. This is the difference between ears and a hat.</span></label></li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head"><span class="phase-num">04</span><h3>Export</h3><span class="phase-when">evening one</span></div>
+      <ul class="steps">
+        <li class="step"><input type="checkbox" id="s14"><label for="s14">Export as <strong>VRM</strong> from the top-right export icon<span class="step-sub">Not XAvatar — VRChat needs the VRM. Keep the <code>.vroid</code> project file too, so you can edit her later.</span></label></li>
+        <li class="step"><input type="checkbox" id="s15"><label for="s15">In the export dialog, reduce materials and bones where offered<span class="step-sub">VRoid models are heavy by default. Trimming here saves you pain at the performance-rank stage.</span></label></li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head"><span class="phase-num">05</span><h3>Build the Unity toolchain</h3><span class="phase-when">evening two</span></div>
+      <p style="color:var(--ink-soft);font-size:.95rem">The tedious evening. Let the Creator Companion install Unity for you — do not install Unity by hand, and do not pick your own version.</p>
+      <ul class="steps">
+        <li class="step"><input type="checkbox" id="s16"><label for="s16">Install the <a href="https://vrchat.com/home/download" target="_blank" rel="noopener">VRChat Creator Companion</a> (VCC)<span class="step-sub">It installs Unity <code>2022.3.22f1</code>, the version VRChat currently requires.</span></label></li>
+        <li class="step"><input type="checkbox" id="s17"><label for="s17">Create a new project from the <strong>Avatars</strong> template<span class="step-sub">This gives you the VRChat Base and Avatar SDK packages for an Avatars 3.0 project.</span></label></li>
+        <li class="step"><input type="checkbox" id="s18"><label for="s18">Add the VRM Converter repo under <em>Settings → Packages → Add Repository</em><span class="step-sub"><code>https://esperecyan.github.io/VRMConverterForVRChat/registry.json</code></span></label></li>
+        <li class="step"><input type="checkbox" id="s19"><label for="s19">Add the Poiyomi shader repo<span class="step-sub"><code>https://poiyomi.github.io/vpm/index.json</code> — free and open source.</span></label></li>
+        <li class="step"><input type="checkbox" id="s20"><label for="s20">Add the VRCFury repo<span class="step-sub"><code>https://vcc.vrcfury.com</code> — free, and the easiest way to bolt on toggles later.</span></label></li>
+        <li class="step"><input type="checkbox" id="s21"><label for="s21">In <em>Manage Project</em>, add: VRM Converter, Poiyomi, VRCFury, Gesture Manager<span class="step-sub">Gesture Manager lets you preview her expressions in Unity without uploading. It'll save you a dozen test uploads.</span></label></li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head"><span class="phase-num">06</span><h3>Convert and polish</h3><span class="phase-when">evening three</span></div>
+      <ul class="steps">
+        <li class="step"><input type="checkbox" id="s22"><label for="s22">Drag the <code>.vrm</code> into the project, then drag the generated prefab into the scene<span class="step-sub">Unity imports it via UniVRM and creates a prefab automatically.</span></label></li>
+        <li class="step"><input type="checkbox" id="s23"><label for="s23">Run <strong>Convert VRM prefab to VRChat avatar</strong><span class="step-sub">This is the whole point of the converter package. It wires up the VRC Avatar Descriptor, and converts VRM spring bones into PhysBones — so her hair, ears and tail move on their own.</span></label></li>
+        <li class="step"><input type="checkbox" id="s24"><label for="s24">Check the performance rank in the SDK panel<span class="step-sub">VRoid avatars usually land at Poor. If it bothers you, run the converter's <strong>Merge meshes and submeshes</strong> tool — it collapses material count, which is normally the worst offender.</span></label></li>
+        <li class="step"><input type="checkbox" id="s25"><label for="s25">Optional: swap MToon10 materials to Poiyomi<span class="step-sub">Better lighting and rim light, and it's what most avatars in the wild use. MToon10 works fine if you'd rather not.</span></label></li>
+        <li class="step"><input type="checkbox" id="s26"><label for="s26">Test with Gesture Manager, in play mode<span class="step-sub">Check visemes actually move her mouth and that the ears and tail swing without clipping through her head.</span></label></li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head"><span class="phase-num">07</span><h3>Upload</h3><span class="phase-when">evening three</span></div>
+      <ul class="steps">
+        <li class="step"><input type="checkbox" id="s27"><label for="s27">Log into the SDK panel and fill in name, description and a thumbnail<span class="step-sub">Frame the thumbnail on her face. It's what you'll be scrolling past in your avatar list forever.</span></label></li>
+        <li class="step"><input type="checkbox" id="s28"><label for="s28">Build &amp; Publish<span class="step-sub">Then find her under your own avatars in-game.</span></label></li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Ledger</p>
+      <h2>What this costs</h2>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Tool</th><th>What it's for</th><th>Cost</th></tr></thead>
+        <tbody>
+          <tr><td>VRoid Studio</td><td>Designing the character</td><td class="cost">Free</td></tr>
+          <tr><td>Unity 2022.3.22f1</td><td>Assembling the avatar</td><td class="cost">Free</td></tr>
+          <tr><td>VRChat Creator Companion</td><td>Installs Unity + the SDK</td><td class="cost">Free</td></tr>
+          <tr><td>VRM Converter for VRChat</td><td>VRM → VRChat avatar</td><td class="cost">¥0</td></tr>
+          <tr><td>Poiyomi Toon Shader</td><td>Optional better shading</td><td class="cost">Free</td></tr>
+          <tr><td>VRCFury</td><td>Toggles and accessories</td><td class="cost">Free</td></tr>
+          <tr><td>Gesture Manager</td><td>Previewing in Unity</td><td class="cost">Free</td></tr>
+          <tr><td>Cat ear preset</td><td>The ears</td><td class="cost">¥0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">If you later want the polished, bought-avatar look instead, that's a different route — creators like <strong>MoonBuVR</strong> sell finished avatars on Jinxxy, and their Discord runs free uploads for people who don't want to touch Unity. Worth knowing it exists once you've felt how much work the free path is.</p>
+  </section>
+
+  <footer>
+    <p class="eyebrow">Sources</p>
+    <ul>
+      <li><a href="https://vroid.pixiv.help/hc/en-us/articles/38728373457561-Using-a-model-in-VRChat" target="_blank" rel="noopener">VRoid FAQ — using a model in VRChat</a></li>
+      <li><a href="https://vroid.com/en/studio/notice/4qHpZB8TgtooNKXSNvlWx6" target="_blank" rel="noopener">VRoid v1.27.0 — cat/fox/rabbit tail accessories</a></li>
+      <li><a href="https://github.com/esperecyan/VRMConverterForVRChat" target="_blank" rel="noopener">VRM Converter for VRChat</a> · <a href="https://pokemori.booth.pm/items/1025226" target="_blank" rel="noopener">BOOTH (¥0)</a></li>
+      <li><a href="https://vcc.docs.vrchat.com/" target="_blank" rel="noopener">VRChat Creator Companion docs</a> · <a href="https://creators.vrchat.com/getting-started/" target="_blank" rel="noopener">VRChat creator docs</a></li>
+      <li><a href="https://www.poiyomi.com/download" target="_blank" rel="noopener">Poiyomi Shaders</a> · <a href="https://vrcfury.com/download/" target="_blank" rel="noopener">VRCFury</a> · <a href="https://github.com/BlackStartx/VRC-Gesture-Manager" target="_blank" rel="noopener">Gesture Manager</a></li>
+    </ul>
+    <p class="sync" id="sync-status">Progress saves as you tick.</p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('li.step input[type="checkbox"]'));
+  var countEl = document.getElementById('count');
+  var fillEl = document.getElementById('fill');
+  var statusEl = document.getElementById('sync-status');
+  var LS_KEY = 'sable-build-progress';
+  var DOC = 'progress/build';
+  var db = null;
+  var saveTimer = null;
+  var applying = false;
+
+  function currentDone() {
+    return boxes.filter(function (b) { return b.checked; }).map(function (b) { return b.id; });
+  }
+
+  function paint() {
+    var done = boxes.filter(function (b) { return b.checked; }).length;
+    countEl.textContent = done + ' / ' + boxes.length;
+    fillEl.style.width = (boxes.length ? (done / boxes.length) * 100 : 0) + '%';
+  }
+
+  function apply(done) {
+    if (!done || !done.length) { applying = false; paint(); return; }
+    applying = true;
+    var set = {};
+    done.forEach(function (id) { set[id] = true; });
+    boxes.forEach(function (b) { b.checked = !!set[b.id]; });
+    applying = false;
+    paint();
+  }
+
+  function readLocal() {
+    try {
+      var raw = localStorage.getItem(LS_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  }
+
+  function writeLocal(done) {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(done)); } catch (e) {}
+  }
+
+  function save() {
+    var done = currentDone();
+    writeLocal(done);
+    if (!db) return;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () {
+      db.doc(DOC).set({ done: done, updated: Date.now() }).then(function () {
+        statusEl.textContent = 'Progress synced — it follows you to other devices.';
+      })['catch'](function () {
+        statusEl.textContent = 'Saved on this device only — syncing is unavailable right now.';
+      });
+    }, 500);
+  }
+
+  // Render at rest, then restore.
+  paint();
+  apply(readLocal());
+
+  boxes.forEach(function (b) {
+    b.addEventListener('change', function () { if (!applying) { paint(); save(); } });
+  });
+
+  if (window.claude && typeof window.claude.use === 'function') {
+    window.claude.use('db').then(function (ns) {
+      if (!ns) return;
+      db = ns;
+      statusEl.textContent = 'Progress synced — it follows you to other devices.';
+      db.doc(DOC).onSnapshot(function (snap) {
+        var data = snap && (snap.data ? (typeof snap.data === 'function' ? snap.data() : snap.data) : snap);
+        if (data && data.done) { apply(data.done); writeLocal(data.done); }
+      });
+    })['catch'](function () {});
+  }
+})();
+</script>
+</body>
+</html>
