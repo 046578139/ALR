@@ -25,9 +25,10 @@ python3 -m http.server 8000     # then visit http://localhost:8000/vrchat-avatar
 6. **Poiyomi / VRCFury / Gesture Manager** (all free) — polish and test.
 7. **Shading** — Anisotropics on hair, rim lighting, matcaps, specular. The
    highest-leverage step in the build.
-8. **Lighting** — a lighting rig plus dark, high-contrast worlds. A large share of
-   any good avatar photo is the room, not the mesh.
-9. **Upload.**
+8. **Upload.**
+9. **Lighting and photos** — a lighting rig plus dark, high-contrast worlds. This
+   happens in-game, so it comes after the upload and never really finishes. A
+   large share of any good avatar photo is the room, not the mesh.
 
 ## The one real blocker
 

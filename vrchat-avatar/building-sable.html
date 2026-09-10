@@ -169,8 +169,6 @@
   }
   .note strong { color: var(--ink); }
 
-
-
   /* ---- character spec ---- */
   .spec {
     background: var(--surface);
@@ -414,7 +412,7 @@
     </div>
 
     <div class="phase">
-      <div class="phase-head"><span class="phase-num">06</span><h3>Convert and polish</h3><span class="phase-when">evening three</span></div>
+      <div class="phase-head"><span class="phase-num">06</span><h3>Convert and check</h3><span class="phase-when">evening three</span></div>
       <ul class="steps">
         <li class="step"><input type="checkbox" id="s22"><label for="s22">Drag the <code>.vrm</code> into the project, then drag the generated prefab into the scene<span class="step-sub">Unity imports it via UniVRM and creates a prefab automatically.</span></label></li>
         <li class="step"><input type="checkbox" id="s23"><label for="s23">Run <strong>Convert VRM prefab to VRChat avatar</strong><span class="step-sub">This is the whole point of the converter package. It wires up the VRC Avatar Descriptor, and converts VRM spring bones into PhysBones — so her hair, ears and tail move on their own.</span></label></li>
@@ -438,21 +436,20 @@
     </div>
 
     <div class="phase">
-      <div class="phase-head"><span class="phase-num">08</span><h3>Light it, then shoot it</h3><span class="phase-when">ongoing</span></div>
-      <p style="color:var(--ink-soft);font-size:.95rem">Your avatar carries no lighting of its own — the world lights it. The same model in two worlds looks like two different models, and a large share of every avatar photo you have admired is the room, not the mesh.</p>
-      <ul class="steps">
-        <li class="step"><input type="checkbox" id="s36"><label for="s36">Check her in a lighting test world before judging your own work<span class="step-sub"><a href="https://vrchat.com/home/launch?worldId=wrld_a1e635dc-8b33-493a-9bff-2b250bc6c525" target="_blank" rel="noopener">Light Box</a> swaps lighting conditions on demand; <a href="https://vrchat.com/home/launch?worldId=wrld_96460268-8c89-438f-b8f2-2ea2f1ed1ce7" target="_blank" rel="noopener">The Avatar Studio</a> is built for avatar testing. If she looks bad in a default-lit world, that is the world, not necessarily her.</span></label></li>
-        <li class="step"><input type="checkbox" id="s37"><label for="s37">Carry your own lights<span class="step-sub"><a href="https://github.com/PeachBight/VRCLightingRig" target="_blank" rel="noopener">VRCLightingRig</a> is a free, open-source rig you attach to the avatar. Studio-light assets like Simple Studio Lights do the same thing. A key light plus a rim light is the whole setup in your reference image.</span></label></li>
-        <li class="step"><input type="checkbox" id="s38"><label for="s38">Shoot in dark worlds with one strong light<span class="step-sub">Dark ground, bright rim, heavy contrast — that is the look. Worlds like Velour Nox and Neon Box World ship multiple lighting scenes for exactly this. Bright even lighting flatters expensive models and destroys cheap ones.</span></label></li>
-        <li class="step"><input type="checkbox" id="s39"><label for="s39">Use the in-game camera's focus and depth of field<span class="step-sub">Throwing the background out of focus hides an enormous amount. Drop the camera low, angle up slightly, and let the rim light do the separating.</span></label></li>
-      </ul>
-    </div>
-
-    <div class="phase">
-      <div class="phase-head"><span class="phase-num">09</span><h3>Upload</h3><span class="phase-when">evening three</span></div>
+      <div class="phase-head"><span class="phase-num">08</span><h3>Upload</h3><span class="phase-when">evening four</span></div>
       <ul class="steps">
         <li class="step"><input type="checkbox" id="s27"><label for="s27">Log into the SDK panel and fill in name, description and a thumbnail<span class="step-sub">Frame the thumbnail on her face. It's what you'll be scrolling past in your avatar list forever.</span></label></li>
         <li class="step"><input type="checkbox" id="s28"><label for="s28">Build &amp; Publish<span class="step-sub">Then find her under your own avatars in-game.</span></label></li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="phase-head"><span class="phase-num">09</span><h3>Light it, then shoot it</h3><span class="phase-when">ongoing</span></div>
+      <p style="color:var(--ink-soft);font-size:.95rem">This part happens in-game, so it starts after she is uploaded and never really finishes. Your avatar carries no lighting of its own — the world lights it. The same model in two worlds looks like two different models, and a large share of every avatar photo you have admired is the room, not the mesh.</p>
+      <ul class="steps">
+        <li class="step"><input type="checkbox" id="s36"><label for="s36">Check her in a lighting test world before judging your own work<span class="step-sub"><a href="https://vrchat.com/home/launch?worldId=wrld_a1e635dc-8b33-493a-9bff-2b250bc6c525" target="_blank" rel="noopener">Light Box</a> swaps lighting conditions on demand; <a href="https://vrchat.com/home/launch?worldId=wrld_96460268-8c89-438f-b8f2-2ea2f1ed1ce7" target="_blank" rel="noopener">The Avatar Studio</a> is built for avatar testing. If she looks bad in a default-lit world, that is the world, not necessarily her.</span></label></li>
+        <li class="step"><input type="checkbox" id="s37"><label for="s37">Carry your own lights<span class="step-sub"><a href="https://github.com/PeachBight/VRCLightingRig" target="_blank" rel="noopener">VRCLightingRig</a> is a free, open-source rig you attach to the avatar. Studio-light assets like Simple Studio Lights do the same thing. A key light plus a rim light is the whole setup behind most avatar photos you have admired. It is a Unity component, so adding it means one more upload — you will do many.</span></label></li>
+        <li class="step"><input type="checkbox" id="s38"><label for="s38">Shoot in dark worlds with one strong light<span class="step-sub">Dark ground, bright rim, heavy contrast — that is the look. Worlds like Velour Nox and Neon Box World ship multiple lighting scenes for exactly this. Bright even lighting flatters expensive models and destroys cheap ones.</span></label></li>
+        <li class="step"><input type="checkbox" id="s39"><label for="s39">Use the in-game camera's focus and depth of field<span class="step-sub">Throwing the background out of focus hides an enormous amount. Drop the camera low, angle up slightly, and let the rim light do the separating.</span></label></li>
       </ul>
     </div>
   </section>
@@ -470,7 +467,7 @@
           <tr><td>Unity 2022.3.22f1</td><td>Assembling the avatar</td><td class="cost">Free</td></tr>
           <tr><td>VRChat Creator Companion</td><td>Installs Unity + the SDK</td><td class="cost">Free</td></tr>
           <tr><td>VRM Converter for VRChat</td><td>VRM → VRChat avatar</td><td class="cost">¥0</td></tr>
-          <tr><td>Poiyomi Toon Shader</td><td>Optional better shading</td><td class="cost">Free</td></tr>
+          <tr><td>Poiyomi Toon Shader</td><td>Hair sheen, rim light, specular — phase 07</td><td class="cost">Free</td></tr>
           <tr><td>VRCFury</td><td>Toggles and accessories</td><td class="cost">Free</td></tr>
           <tr><td>Gesture Manager</td><td>Previewing in Unity</td><td class="cost">Free</td></tr>
           <tr><td>Cat ear preset</td><td>The ears</td><td class="cost">¥0</td></tr>
