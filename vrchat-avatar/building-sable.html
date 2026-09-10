@@ -169,6 +169,8 @@
   }
   .note strong { color: var(--ink); }
 
+
+
   /* ---- character spec ---- */
   .spec {
     background: var(--surface);
@@ -277,11 +279,11 @@
 <div class="wrap">
 
   <header>
-    <p class="eyebrow">Free build · PC / PCVR · no modeling required</p>
+    <p class="eyebrow">Free base · heavy shader work · PC / PCVR</p>
     <h1>Building Sable</h1>
-    <p class="lede">A cute kemonomimi VRChat avatar, made entirely from free tools. You design her yourself in a character creator, convert, and upload — no Blender, no marketplace purchase, no ripped models.</p>
+    <p class="lede">A cute kemonomimi VRChat avatar built from free parts, then pushed as far as shading and lighting will take it. The model costs nothing. The polish is where the hours go — and it is most of what you are actually looking at in a good avatar photo.</p>
     <div class="meter">
-      <span class="meter-count" id="count">0 / 28</span>
+      <span class="meter-count" id="count">0 / 38</span>
       <span class="meter-track"><span class="meter-fill" id="fill"></span></span>
       <span class="meter-note" id="sync-note">steps done</span>
     </div>
@@ -294,6 +296,28 @@
     </div>
     <p>Every tool below is genuinely free. The blocker isn't money — it's your VRChat account. <strong>Brand-new Visitor accounts cannot upload avatars.</strong> You need to reach <strong>New User</strong> trust rank first, which means verifying your email and spending some hours actually playing. Start that clock today, because it runs in the background while you build everything else.</p>
     <p class="note">Budget roughly <strong>three evenings</strong>: one to design her, one to fight Unity into place, one to convert, polish and upload. The middle evening is the annoying one. Everything after it is fast.</p>
+  </section>
+
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Expectations</p>
+      <h2>What shaders fix, and what they don't</h2>
+    </div>
+    <p>Worth being blunt, because it decides whether this is worth your evenings. A free VRoid base with serious shader and lighting work will look <em>dramatically</em> better than the same base straight out of the converter. It will not look like a $60 avatar from a good artist. The gap that closes and the gap that doesn't are different gaps.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Shading and lighting fix this</th><th>Only modeling fixes this</th></tr></thead>
+        <tbody>
+          <tr><td>Flat, dead lighting — the single biggest tell</td><td>Mesh topology and silhouette</td></tr>
+          <tr><td>Hair with no directional sheen</td><td>Hair card count and shape — VRoid's are chunky and few</td></tr>
+          <tr><td>No edge separation from the background</td><td>Face proportions and eye geometry</td></tr>
+          <tr><td>Plastic, matte, uniform skin</td><td>Body sculpt and hands</td></tr>
+          <tr><td>No surface detail in fabric</td><td>Clothing that drapes and folds like cloth</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">The practical read: your avatar will photograph well and look good in motion, and it will not survive a side-by-side with a commissioned model. If that trade is fine, everything below is worth doing.</p>
   </section>
 
   <section>
@@ -395,13 +419,37 @@
         <li class="step"><input type="checkbox" id="s22"><label for="s22">Drag the <code>.vrm</code> into the project, then drag the generated prefab into the scene<span class="step-sub">Unity imports it via UniVRM and creates a prefab automatically.</span></label></li>
         <li class="step"><input type="checkbox" id="s23"><label for="s23">Run <strong>Convert VRM prefab to VRChat avatar</strong><span class="step-sub">This is the whole point of the converter package. It wires up the VRC Avatar Descriptor, and converts VRM spring bones into PhysBones — so her hair, ears and tail move on their own.</span></label></li>
         <li class="step"><input type="checkbox" id="s24"><label for="s24">Check the performance rank in the SDK panel<span class="step-sub">VRoid avatars usually land at Poor. If it bothers you, run the converter's <strong>Merge meshes and submeshes</strong> tool — it collapses material count, which is normally the worst offender.</span></label></li>
-        <li class="step"><input type="checkbox" id="s25"><label for="s25">Optional: swap MToon10 materials to Poiyomi<span class="step-sub">Better lighting and rim light, and it's what most avatars in the wild use. MToon10 works fine if you'd rather not.</span></label></li>
         <li class="step"><input type="checkbox" id="s26"><label for="s26">Test with Gesture Manager, in play mode<span class="step-sub">Check visemes actually move her mouth and that the ears and tail swing without clipping through her head.</span></label></li>
       </ul>
     </div>
 
     <div class="phase">
-      <div class="phase-head"><span class="phase-num">07</span><h3>Upload</h3><span class="phase-when">evening three</span></div>
+      <div class="phase-head"><span class="phase-num">07</span><h3>Shading — where the gap actually closes</h3><span class="phase-when">evening four</span></div>
+      <p style="color:var(--ink-soft);font-size:.95rem">The highest-leverage work in the whole build, and the part most people skip. Do this on every material, hair first.</p>
+      <ul class="steps">
+        <li class="step"><input type="checkbox" id="s29"><label for="s29">Swap every material from MToon10 to <code>.poiyomi/Poiyomi Toon</code><span class="step-sub">Select all materials, change the shader dropdown. Your textures carry over; everything below is now available.</span></label></li>
+        <li class="step"><input type="checkbox" id="s30"><label for="s30"><strong>Hair → Anisotropics.</strong> The single biggest win<span class="step-sub">This is the directional streak of shine that runs across hair and follows the light. It is most of what reads as "expensive hair." Poiyomi gives you two layers — Top and Bottom — each with Power, Strength, Offset, a colour tint, direction flip, and edge adjust/blur. Set the top layer tight and bright, the bottom wide and dim.</span></label></li>
+        <li class="step"><input type="checkbox" id="s31"><label for="s31">Turn on <strong>Rim Lighting</strong> on skin, hair and clothes<span class="step-sub">It samples the angle between your viewpoint and the surface normal, so it glows along every silhouette edge. This is what separates a character from a dark background — the bright outline in any good avatar shot. Tint it to whatever colour the room is.</span></label></li>
+        <li class="step"><input type="checkbox" id="s32"><label for="s32">Add a <strong>MatCap</strong> for sheen<span class="step-sub">A spherical texture that fakes reflection cheaply. Poiyomi takes up to four. Drop a metallic matcap on skin or latex and pull Border Strength down to about <code>0.3</code> so the reflection sits naturally at the edges instead of ringing the whole mesh.</span></label></li>
+        <li class="step"><input type="checkbox" id="s33"><label for="s33"><strong>Specular Highlights</strong> for the wet look<span class="step-sub">The parameters are Specular Map (where reflections happen), Smoothness (how sharp), Specular Tint, IOR (higher reflects more) and Fresnel (strength at steep angles). Wet skin and latex are high Smoothness plus strong Fresnel — that is the whole trick.</span></label></li>
+        <li class="step"><input type="checkbox" id="s34"><label for="s34">Drop a normal map into the <strong>Normal Map</strong> slot<span class="step-sub">Normal Intensity between <code>0.5</code> and <code>1.2</code>. VRoid textures are completely flat, so even a generic fabric normal gives clothes surface where they had none.</span></label></li>
+        <li class="step"><input type="checkbox" id="s35"><label for="s35">Mark animated properties <em>before</em> the material locks<span class="step-sub">Poiyomi auto-locks on build, and locking strips anything not flagged. While unlocked, right-click a property you plan to animate → <strong>Animated (When Locked)</strong>, then right-click → Copy Animated Property Name for your animation. Skip this and your toggles silently stop working after upload.</span></label></li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head"><span class="phase-num">08</span><h3>Light it, then shoot it</h3><span class="phase-when">ongoing</span></div>
+      <p style="color:var(--ink-soft);font-size:.95rem">Your avatar carries no lighting of its own — the world lights it. The same model in two worlds looks like two different models, and a large share of every avatar photo you have admired is the room, not the mesh.</p>
+      <ul class="steps">
+        <li class="step"><input type="checkbox" id="s36"><label for="s36">Check her in a lighting test world before judging your own work<span class="step-sub"><a href="https://vrchat.com/home/launch?worldId=wrld_a1e635dc-8b33-493a-9bff-2b250bc6c525" target="_blank" rel="noopener">Light Box</a> swaps lighting conditions on demand; <a href="https://vrchat.com/home/launch?worldId=wrld_96460268-8c89-438f-b8f2-2ea2f1ed1ce7" target="_blank" rel="noopener">The Avatar Studio</a> is built for avatar testing. If she looks bad in a default-lit world, that is the world, not necessarily her.</span></label></li>
+        <li class="step"><input type="checkbox" id="s37"><label for="s37">Carry your own lights<span class="step-sub"><a href="https://github.com/PeachBight/VRCLightingRig" target="_blank" rel="noopener">VRCLightingRig</a> is a free, open-source rig you attach to the avatar. Studio-light assets like Simple Studio Lights do the same thing. A key light plus a rim light is the whole setup in your reference image.</span></label></li>
+        <li class="step"><input type="checkbox" id="s38"><label for="s38">Shoot in dark worlds with one strong light<span class="step-sub">Dark ground, bright rim, heavy contrast — that is the look. Worlds like Velour Nox and Neon Box World ship multiple lighting scenes for exactly this. Bright even lighting flatters expensive models and destroys cheap ones.</span></label></li>
+        <li class="step"><input type="checkbox" id="s39"><label for="s39">Use the in-game camera's focus and depth of field<span class="step-sub">Throwing the background out of focus hides an enormous amount. Drop the camera low, angle up slightly, and let the rim light do the separating.</span></label></li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head"><span class="phase-num">09</span><h3>Upload</h3><span class="phase-when">evening three</span></div>
       <ul class="steps">
         <li class="step"><input type="checkbox" id="s27"><label for="s27">Log into the SDK panel and fill in name, description and a thumbnail<span class="step-sub">Frame the thumbnail on her face. It's what you'll be scrolling past in your avatar list forever.</span></label></li>
         <li class="step"><input type="checkbox" id="s28"><label for="s28">Build &amp; Publish<span class="step-sub">Then find her under your own avatars in-game.</span></label></li>
